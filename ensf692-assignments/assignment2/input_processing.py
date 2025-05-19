@@ -23,18 +23,31 @@ class Sensor:
         self.car = "no"
         pass
 
-    # Replace these comments with your function commenting
-    def update_status(): # You may decide how to implement the arguments for this function
-        print("Light =", self.traffic_light_color, "Pedestrian =", self.pedestrian, "Car =", self.car)
-
+    # Function to update the status of the sensor
+    def update_status():
         print("Are any changes detected in the vision input?")
-        while vision_input != "0":
-            # get user input
-            vision_input = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program:")
-            if vision_input == "1":
-                self.traffic_light_color = input("What change has been identified?: ")
+        # Get user input for menu option
+        # 1 for light, 2 for pedestrian, 3 for vehicle
+        menu_option = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program:")
+        if menu_option == "1":
+            # Get user input for light color
+            self.traffic_light_color = input("What change has been identified?: ")
+        elif menu_option == "2":
+            # Get user input for pedestrian status
+            self.pedestrian = input("What change has been identified?: ")
+        elif menu_option == "3":
+            # Get user input for vehicle status
+            self.car = input("What change has been identified?: ")
+        elif menu_option == "0":
+            # End the program
+            return
+        else:
+            # Invalid input
+
         
-        elif vision_input == "2":
+
+          # Show current status
+        print("Light =", self.traffic_light_color, "Pedestrian =", self.pedestrian, "Car =", self.car)
         pass
 
 
@@ -59,6 +72,19 @@ def print_message(sensor):
 # Complete the main function below
 def main():
     print("\n***ENSF 692 Car Vision Detector Processing Program***\n")
+    # Create a sensor object
+    sensor = Sensor()
+    # Loop until the user chooses to end the program
+    while True:
+        # Call the update_status method to get user input
+        sensor.update_status()
+        # Check if the user wants to end the program
+        if sensor.menu_option == "0":
+            break
+        else
+            # Call the print_message function to display the action message
+             print_message(sensor)
+
 
 
 
