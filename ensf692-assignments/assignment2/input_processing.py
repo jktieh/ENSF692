@@ -20,54 +20,32 @@ class Sensor:
     def __init__(self):
         self.traffic_light_color = "green"  # Default value
         self.pedestrian = "no"  # Default value
-        self.car = "no"
+        self.vehicle = "no"
         pass
 
     # Function to update the status of the sensor
-    def update_status():
-        print("Are any changes detected in the vision input?")
-        # Get user input for menu option
-        # 1 for light, 2 for pedestrian, 3 for vehicle
-        menu_option = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program:")
-        if menu_option == "1":
-            # Get user input for light color
-            self.traffic_light_color = input("What change has been identified?: ")
-        elif menu_option == "2":
-            # Get user input for pedestrian status
-            self.pedestrian = input("What change has been identified?: ")
-        elif menu_option == "3":
-            # Get user input for vehicle status
-            self.car = input("What change has been identified?: ")
-        elif menu_option == "0":
-            # End the program
-            return
-        else:
-            # Invalid input
-
-        
-
-          # Show current status
-        print("Light =", self.traffic_light_color, "Pedestrian =", self.pedestrian, "Car =", self.car)
-        pass
-
-
-
+    def update_status(self, menu_input, status_input):
+       if menu_input == '1' and (status_input in ["green", "yellow", "red)"]):
+            self.traffic_light_color = status_input
+       elif menu_input == '2' and (status_input in ["yes", "no"]):
+            self.pedestrian = status_input
+       elif menu_input == '3' and (status_input in ["yes", "no"]):
+            self.vehicle = status_input
+       else:
+            print("Invalid vision change.")      
+            
 # The sensor object should be passed to this function to print the action message and current status
 # Replace these comments with your function commenting
-def print_message(sensor):
-    #error message 1
-    if sensor.traffic_light_color == "red" or sensor.pedestrian == "yes" or sensor.car == "yes":
-        print("STOP")
-    elif sensor.traffic_light_color == "yellow"
-        print("Caution")
-    elif sensor.traffic_light_color == "green"
-        print("Proceed")
-    else:
-        print("Invalid vision input")
-    pass
+    def print_message(self):
+        #error message 1
+        if self.traffic_light_color == "red" or self.pedestrian == "yes" or self.vehicle == "yes":
+            print("\nSTOP\n")
+        elif self.traffic_light_color == "yellow":
+            print("\nCaution\n")
+        elif self.traffic_light_color == "green":
+            print("\nProceed\n")
 
-
-
+        print("Light = " + self.traffic_light_color + ', Pedestrian = ' + self.pedestrian + ', Vehicle = ' + self.vehicle)
 
 # Complete the main function below
 def main():
@@ -77,21 +55,24 @@ def main():
     # Loop until the user chooses to end the program
     while True:
         # Call the update_status method to get user input
-        sensor.update_status()
-        # Check if the user wants to end the program
-        if sensor.menu_option == "0":
+        print("Are any changes detected in the vision input?: ")
+        # Get user input for menu option
+        menu_input = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program: ")
+        # validate that the user has inputted a proper value, if not, restart loop
+        if menu_input in ['1', '2', '3']:
+            status_input = input('What change has been identified?: ')
+            Sensor.update_status(sensor, menu_input, status_input)
+        elif menu_input in ['0']:
             break
-        else
-            # Call the print_message function to display the action message
-             print_message(sensor)
+        else:         
+            print(("You must select either 1, 2, 3, or 0.\n"))
 
-
-
-
+        Sensor.print_message(sensor)
 
 
 # Conventional Python code for running main within a larger program
 # No additional code should be included below this
 if __name__ == '__main__':
     main()
+
 
