@@ -38,6 +38,8 @@ class Sensor:
 # Replace these comments with your function commenting
     def print_message(self):
         #error message 1
+        
+        
         if self.traffic_light_color == "red" or self.pedestrian == "yes" or self.vehicle == "yes":
             print("\nSTOP\n")
         elif self.traffic_light_color == "yellow":
@@ -45,7 +47,7 @@ class Sensor:
         elif self.traffic_light_color == "green":
             print("\nProceed\n")
 
-        print("Light = " + self.traffic_light_color + ', Pedestrian = ' + self.pedestrian + ', Vehicle = ' + self.vehicle)
+        print("Light = " + self.traffic_light_color + ", Pedestrian = " + self.pedestrian + ", Vehicle = " + self.vehicle + "\n")
 
 # Complete the main function below
 def main():
@@ -55,19 +57,20 @@ def main():
     # Loop until the user chooses to end the program
     while True:
         # Call the update_status method to get user input
-        print("Are any changes detected in the vision input?: ")
+        print("Are any changes detected in the vision input? ")
         # Get user input for menu option
         menu_input = input("Select 1 for light, 2 for pedestrian, 3 for vehicle, or 0 to end the program: ")
         # validate that the user has inputted a proper value, if not, restart loop
         if menu_input in ['1', '2', '3']:
             status_input = input('What change has been identified?: ')
             Sensor.update_status(sensor, menu_input, status_input)
+            Sensor.print_message(sensor)
         elif menu_input in ['0']:
             break
         else:         
             print(("You must select either 1, 2, 3, or 0.\n"))
 
-        Sensor.print_message(sensor)
+        
 
 
 # Conventional Python code for running main within a larger program
