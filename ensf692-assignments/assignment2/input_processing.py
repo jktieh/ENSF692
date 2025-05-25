@@ -28,7 +28,7 @@ class Sensor:
        Update the status of the sensor based on user selection
        of the menu item (0, 1, 2, 3) and status (green, yes, no, etc.)
        """
-       if menu_input == '1' and (status_input in ["green", "yellow", "red)"]):
+       if menu_input == '1' and (status_input in ["green", "yellow", "red"]):
             self.traffic_light_color = status_input
        elif menu_input == '2' and (status_input in ["yes", "no"]):
             self.pedestrian = status_input
