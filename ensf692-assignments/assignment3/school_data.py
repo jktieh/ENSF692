@@ -41,14 +41,12 @@ school_indices = school_list[0::3]  # Extract school indices
 school_names = school_list[1::3]  # Extract school names
 school_codes = school_list[2::3]  # Extract school codes
 
-# Convert the list to a dictionary for easier access
+# Create two dictionaries to map school names and codes to their respective indices
 school_names_dict = dict(zip(school_names, school_indices))
 school_code_dict = dict(zip(school_codes, school_indices))
 
 
 def main():
-    print("ENSF 692 School Enrollment Statistics")
-
     # Print Stage 1 requirements here
     # 1.1 Create a 3-dimensional array using the provided high school enrollment data
     # 1.2 Print the shape and dimensions of the array.
@@ -62,8 +60,9 @@ def main():
 
     # Print Stage 2 requirements here
     # 2.1 Prompt user for school name or school code
-    print("\n***Requested School Statistics***\n")
     school_input = input("Enter a school name or school code: ")
+
+    print("\n***Requested School Statistics***\n")
 
     # 2.2 Check if the input is a valid school name or code
     if school_input.isdigit():
@@ -71,7 +70,7 @@ def main():
         school_code = int(school_input)
         if school_code in school_code_dict:
             school_index = school_code_dict[school_code]
-            print(f"School Index: {school_index}")
+            # print(f"School Index: {school_index}") 
         else:
             print("You must enter a valid school name or code.")
             return
@@ -88,64 +87,63 @@ def main():
     school_name = school_names[school_index]
     school_code = school_codes[school_index]
     print(f"School Name: {school_name}, School Code: {school_code}")
-    # 2.4 Print the enrollment for Grade 10, 11, and 12 for the specified school across all years
-    print("\nEnrollment Data for Each Grade Across All Years:")
-    for year in range(10):
-        print(f"Year {2013 + year}: Grade 10: {Array[year, school_index, 0]}, Grade 11: {Array[year, school_index, 1]}, Grade 12: {Array[year, school_index, 2]}")
+   
     # 2.5 Print the mean enrollment for each grade across all years
     mean_enrollment = np.mean(Array[:, school_index, :], axis=0)
-    print("\nMean Enrollment for Each Grade Across All Years:")
-    print(f"Grade 10: {mean_enrollment[0]:.2f}, Grade 11: {mean_enrollment[1]:.2f}, Grade 12: {mean_enrollment[2]:.2f}")
-    # 2.6 Print the highest enrollment for a single grade within the entire time period
-    highest_enrollment = np.max(Array[:, school_index, :], axis=0)
-    print("\nHighest Enrollment for Each Grade Across All Years:")
-    print(f"Grade 10: {highest_enrollment[0]}, Grade 11: {highest_enrollment[1]}, Grade 12: {highest_enrollment[2]}")
+    print(f"Mean Enrollment for Each Grade 10: {mean_enrollment[0]:.0f}" )
+    print(f"Mean Enrollment for Each Grade 11: {mean_enrollment[1]:.0f}" )
+    print(f"Mean Enrollment for Each Grade 12: {mean_enrollment[2]:.0f}" )
+
+    # 2.6 print the highest enrollment for each grade across all years for each grade
+    highest_enrollment = np.nanmax(Array[:, school_index, :]) 
+    highest_enrollment = np.nanmax(highest_enrollment) 
+    print(f"Highest Enrollment for a single grade: {highest_enrollment:.0f}")
+
     # 2.7 Print the lowest enrollment for a single grade within the entire time period
-    lowest_enrollment = np.min(Array[:, school_index, :], axis=0)
-    print("\nLowest Enrollment for Each Grade Across All Years:")
-    print(f"Grade 10: {lowest_enrollment[0]}, Grade 11: {lowest_enrollment[1]}, Grade 12: {lowest_enrollment[2]}")
+    lowest_enrollment = np.nanmin(Array[:, school_index, :])
+    lowest_enrollment = np.nanmin(lowest_enrollment)    
+    print(f"Lowest Enrollment for a single grade: {lowest_enrollment:.0f}")
+    
     # 2.8 Print the total enrollment for each year from 2013 to 2022
     total_enrollment_per_year = np.sum(Array[:, school_index, :], axis=1)
-    print("\nTotal Enrollment for Each Year from 2013 to 2022:")
     for year in range(10):
-        print(f"Year {2013 + year}: {total_enrollment_per_year[year]}")
+        print(f"Total enrollment for {2013 + year}: {total_enrollment_per_year[year]:.0f}")
     # 2.9 Print the total ten-year enrollment
     total_ten_year_enrollment = np.sum(total_enrollment_per_year)
-    print(f"\nTotal Ten-Year Enrollment: {total_ten_year_enrollment}")
+    print(f"Total ten year enrollment: {total_ten_year_enrollment:.0f}")
     # 2.10 Print the mean total yearly enrollment over 10 years
     mean_total_yearly_enrollment = np.mean(total_enrollment_per_year)
-    print(f"Mean Total Yearly Enrollment Over 10 Years: {mean_total_yearly_enrollment:.2f}")
+    print(f"Mean total enrollment over 10 Years: {mean_total_yearly_enrollment:.0f}")
 
+    # 2.11 Print the median value for all enrollments greater than 500
+    all_enrollments = Array[:, school_index, :].flatten()
+    all_enrollments = all_enrollments[all_enrollments > 500]  # Filter enrollments greater than 500
+    if all_enrollments.size > 0:
+        median_enrollment = np.median(all_enrollments)
+        print(f"For all enrollemnts over 500, the median value is: {median_enrollment:.0f}")
+    else:
+        print("No enrollments greater than 500 found.")
 
-
-    # * The school name and school code
-    # * Mean enrollment for Grade 10 across all years
-    # * Mean enrollment for Grade 11 across all years
-    # * Mean enrollment for Grade 12 across all years
-    # * Highest enrollment for a single grade within the entire time period
-    # * Lowest enrollment for a single grade within the entire time period
-    # * Total enrollment for each year from 2013 to 2022
-	# * Total ten year enrollment
-	# * Mean total yearly enrollment over 10 years
+    # Print Stage 3 requirements here
 
     print("\n***General Statistics for All Schools***\n")
 
     # 3.1 Print the mean enrollment in 2013
-    mean_enrollment_2013 = np.nanmean(Array[0, :, :], axis=0)
-    print(f"Mean Enrollment in 2013: Grade 10: {mean_enrollment_2013[0]:.2f}, Grade 11: {mean_enrollment_2013[1]:.2f}, Grade 12: {mean_enrollment_2013[2]:.2f}")
+    mean_enrollment_2013 = np.nanmean(Array[0])
+    print(f"Mean Enrollment in 2013: {mean_enrollment_2013:.0f}")
+
     # 3.2 Print the mean enrollment in 2022
-    mean_enrollment_2022 = np.nanmean(Array[9, :, :], axis=0)
-    print(f"Mean Enrollment in 2022: Grade 10: {mean_enrollment_2022[0]:.2f}, Grade 11: {mean_enrollment_2022[1]:.2f}, Grade 12: {mean_enrollment_2022[2]:.2f}")
+    mean_enrollment_2022 = np.nanmean(Array[9])
+    print(f"Mean Enrollment in 2013: {mean_enrollment_2022:.0f}")
     # 3.3 Print the total graduating class of 2022 across all schools
     total_graduating_class_2022 = np.nansum(Array[9, :, 2])  # Sum of Grade 12 enrollments in 2022
-    print(f"Total Graduating Class of 2022 Across All Schools: {total_graduating_class_2022}")
+    print(f"Total graduating class of 2022: {total_graduating_class_2022:.0f}")
     # 3.4 Print the highest enrollment for a single grade within the entire time period (across all schools)
-    highest_enrollment_all = np.nanmax(Array, axis=(0, 1))  # Max across all years and schools
-    print(f"Highest Enrollment for a Single Grade Across All Schools: Grade 10: {highest_enrollment_all[0]}, Grade 11: {highest_enrollment_all[1]}, Grade 12: {highest_enrollment_all[2]}")
+    highest_enrollment_all = np.nanmax(Array)  # Max across all years and schools
+    print(f"Highest enrollment for a single grade: {highest_enrollment_all:.0f}")
     # 3.5 Print the lowest enrollment for a single grade within the entire time period (across all schools)
-    lowest_enrollment_all = np.nanmin(Array, axis=(0, 1))  # Min across all years and schools
-    print(f"Lowest Enrollment for a Single Grade Across All Schools: Grade 10: {lowest_enrollment_all[0]}, Grade 11: {lowest_enrollment_all[1]}, Grade 12: {lowest_enrollment_all[2]}")
-    
+    lowest_enrollment_all = np.nanmin(Array)  # Min across all years and schools
+    print(f"Lowest enrollment for a single grade: {lowest_enrollment_all:.0f}")    
 
     # * The mean enrollment in 2013
     # * The mean enrollment in 2022
