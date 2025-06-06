@@ -25,24 +25,22 @@ def main():
     unique_breeds = df["Breed"].unique()  # Get all unique dog breed names
     # print(unique_breeds)
 
-    # while True:
-    #     dog_breed_input = input("Please enter a dog breed: ").strip().upper() # makes input uppercase, strip removes whitespace
-    #     try:
-    #         if dog_breed_input in unique_breeds:
-    #             break
-    #         else:
-    #             raise KeyError
-    #     except:
-    #         KeyError(print("Dog breed not found in the data. Please try again."))
+    while True:
+        dog_breed_input = input("Please enter a dog breed: ").strip().upper() # makes input uppercase, strip removes whitespace
+        try:
+            if dog_breed_input in unique_breeds:
+                break
+            else:
+                raise KeyError
+        except:
+            KeyError(print("Dog breed not found in the data. Please try again."))
 
     # # Stage 3: Data anaylsis stage 
-
-    dog_breed_input = "LABRADOR RETR"
 
     # 3.1 Find and print all years where the selected breed was listed in the top breeds.
     # use indexslice to create a dataframe with just the rows of the selected breed
     idx = pd.IndexSlice
-    df_breed_rows = df.loc[idx[:, :], :][df['Breed'] == dog_breed_input]
+    df_breed_input = df.loc[idx[:, :], :][df['Breed'] == dog_breed_input]
     # create dataframe with selected breed, .index returns multi-index, .get_level_values('Year') returns single index
     # .unique filters for unique years, tolist() converts to a list
     years = df[df['Breed'] == dog_breed_input].index.get_level_values('Year').unique().tolist()
@@ -51,23 +49,30 @@ def main():
         print(year, end=" ")
 
     # 3.2 Calculate and print the total number of registrations of the selected breed found in the dataset.
-    total_reg = df_breed_rows['Total'].sum() # sum the totals
+    total_reg = df_breed_input['Total'].sum() # sum the totals
     print(f"\nThere have been {total_reg} {dog_breed_input} dogs registered in total.")
 
     # 3.3 Calculate and print the percentage of selected breed registrations out of the total percentage for each year (2021, 2022, 2023).
     
     for year in [2021, 2022, 2023]:
-        total_year_breed = df_breed_rows.loc[year]['Total'].sum()
+        total_year_breed = df_breed_input.loc[year]['Total'].sum()
         total_year_all = df.loc[year]['Total'].sum()
         percentage = total_year_breed / total_year_all * 100
         print(f"The {dog_breed_input} was {percentage:.6f}% of top breeds in {year}")
 
     # 3.4 Calculate and print the percentage of selected breed registrations out of the total three-year percentage.
-    total_breed = df_breed_rows['Total'].sum()
+    total_breed = df_breed_input['Total'].sum()
     total_all = df['Total'].sum()
     tot_percentage = total_breed / total_all * 100
     print(f"The {dog_breed_input} was {tot_percentage:.6f}% of top breeds across all years")
     
+    # Find and print the months that were most popular for the selected breed registrations. Print all months that tie.
+    breed_months = df_breed_input.groupby('Month').size().dropna() # dropna remove NaN values
+    mask = breed_months >= breed_months.max()
+    pop_breed_months = breed_months[mask].index.to_list()
+    print(f"The most popular months for {dog_breed_input} dogs:", end=" ")
+    for months in pop_breed_months:
+        print(months, end=" ")
 
 if __name__ == '__main__':
     main()
